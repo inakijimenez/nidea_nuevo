@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ipartek.formacion.nidea.pojo.Alert;
 
@@ -23,6 +24,8 @@ public class LoginController extends HttpServlet {
 
 	private static final String USER = "admin";
 	private static final String PASS = "admin";
+
+	private static final int SESSION_EXPIRATION = 60 * 120; // 1 minuto
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
@@ -48,6 +51,17 @@ public class LoginController extends HttpServlet {
 			String password = request.getParameter("password");
 
 			if (USER.equalsIgnoreCase(usuario) && PASS.equals(password)) {
+
+				// guardar datos de usuario
+				HttpSession session = request.getSession();
+				session.setAttribute("usuario", usuario);
+
+				// tiempo de expiracion de session - un valor negativo indica que nunca expira
+				/*
+				 * tbn se puede configurar en el web.xml <!-- Session Configuration -->
+				 * <session-config> <session-timeout>60</session-timeout> </session-config>
+				 */
+				session.setMaxInactiveInterval(SESSION_EXPIRATION);
 
 				view = "backoffice/index.jsp";
 				alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);

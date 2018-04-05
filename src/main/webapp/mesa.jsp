@@ -1,10 +1,12 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.ArrayList"%>
 <%@page import="com.ipartek.formacion.nidea.pojo.Material"%>
 <%@page import="com.ipartek.formacion.nidea.pojo.Mesa"%>
 
-<jsp:include page="templates/head.jsp"></jsp:include>
-<jsp:include page="templates/navbar.jsp"></jsp:include>
-<jsp:include page="/templates/alert.jsp"></jsp:include>
+<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/navbar.jsp" %>
+<%@include file="/templates/alert.jsp" %>
 
 <%
 	// recoger atributo del controlador, si es que existe
@@ -48,9 +50,8 @@
 			</select>
 		</div>	
 	
-	
 		<div class="checkbox" onclick="showColor()" >		
-			<p>¿ Quieres Personalizar el Color ? 
+			<p>¿Quieres Personalizar el Color? 
 				<input type="checkbox" name="custom" 
 				       id="custom" <%=(mesa.isCustom())?"checked":""%> 
 				       data-toggle="toggle" data-on="Si" data-off="No">
@@ -112,5 +113,4 @@
 	
 </script>
 
-
-<jsp:include page="templates/footer.jsp"></jsp:include>
+<%@include file="/templates/footer.jsp" %>

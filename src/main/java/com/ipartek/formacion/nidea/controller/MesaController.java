@@ -28,7 +28,7 @@ public class MesaController extends HttpServlet {
 			throws ServletException, IOException {
 
 		Mesa m = new Mesa();
-		MaterialDAO dao = new MaterialDAO();
+		MaterialDAO dao = MaterialDAO.getInstance();
 
 		// recoger parametros *** SIEMPRE String ***
 		String sPatas = request.getParameter("patas");
@@ -67,9 +67,9 @@ public class MesaController extends HttpServlet {
 			}
 
 			// material
-			String sMateriaPrecio = request.getParameter("materialPrecio");
+			String sMaterialPrecio = request.getParameter("materialPrecio");
 			Material material = new Material();
-			material.setPrecio(Float.parseFloat(sMateriaPrecio));
+			material.setPrecio(Float.parseFloat(sMaterialPrecio));
 			m.setMaterial(material);
 
 		}

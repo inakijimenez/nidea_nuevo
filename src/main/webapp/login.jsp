@@ -1,6 +1,9 @@
-<jsp:include page="templates/head.jsp"></jsp:include>
-<jsp:include page="templates/navbar.jsp"></jsp:include>
-<jsp:include page="templates/alert.jsp"></jsp:include>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/navbar.jsp" %>
+<%@include file="/templates/alert.jsp" %>
+
 
 <div id="login">
 
@@ -19,9 +22,9 @@
         <input type="password" 
                name="password" 
                class="form-control" 
-               placeholder="Contraseña" required>
+               placeholder="ContraseÃ±a" required>
                
-        <label for="password">Contraseña</label>
+        <label for="password">ContraseÃ±a</label>
       </div>
      
       <button class="btn btn-lg btn-primary btn-block" type="submit">Entrar</button>
@@ -29,4 +32,5 @@
     </form>
 
 </div>
-<jsp:include page="templates/footer.jsp"></jsp:include>
+
+<%@include file="/templates/footer.jsp" %>

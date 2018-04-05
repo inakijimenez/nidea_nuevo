@@ -1,18 +1,20 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <%@page import="com.ipartek.formacion.nidea.controller.CalculadoraController"%>
 
-<jsp:include page="/templates/head.jsp"></jsp:include>
-<jsp:include page="/templates/navbar.jsp"></jsp:include>
-<jsp:include page="/templates/alert.jsp"></jsp:include>
+<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/navbar.jsp" %>
+<%@include file="/templates/alert.jsp" %>
 
 <form action="calculadora" method="post">
 
 	<div class="form-group">
-		<label for="num1">1º Numero</label> 
+		<label for="num1">1 Numero</label> 
 		<input type="text" class="form-control" name="num1">		
 	</div>
 	
 	<div class="form-group">
-		<label for="num2">2º Numero</label> 
+		<label for="num2">2 Numero</label> 
 		<input type="text" class="form-control" name="num2">		
 	</div>
 
@@ -28,5 +30,4 @@
 </form>
 
 
-
-<jsp:include page="/templates/footer.jsp"></jsp:include>
+<%@include file="/templates/footer.jsp" %>

@@ -1,5 +1,8 @@
-<jsp:include page="/templates/head.jsp"></jsp:include>
-<jsp:include page="/templates/navbar.jsp"></jsp:include>
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
+<%@include file="/templates/head.jsp" %>
+<%@include file="/templates/navbar.jsp" %>
+<%@include file="/templates/alert.jsp" %>
 
 
 
@@ -8,9 +11,8 @@
 	float resul = (Float)request.getAttribute("resultado");	
 %>		
 
-<h1>Resultado de  la Operación <span class="badge badge-primary"><%=resul%></span> </h1>
+<h1>Resultado de  la OperaciÃ³n <span class="badge badge-primary"><%=resul%></span> </h1>
 
 
 
-
-<jsp:include page="/templates/footer.jsp"></jsp:include>
+<%@include file="/templates/footer.jsp" %>
