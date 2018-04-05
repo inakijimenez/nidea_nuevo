@@ -25,14 +25,13 @@ public class LoginController extends HttpServlet {
 	private static final String USER = "admin";
 	private static final String PASS = "admin";
 
-	private static final int SESSION_EXPIRATION = 60 * 120; // 1 minuto
+	private static final int SESSION_EXPIRATION = -1; // No expira nunca
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 
@@ -42,8 +41,7 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response)
-			throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		try {
 

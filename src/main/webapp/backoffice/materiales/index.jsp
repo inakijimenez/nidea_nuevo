@@ -1,3 +1,5 @@
+<%@page
+	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
@@ -16,15 +18,20 @@
 
 <form action="backoffice/materiales" method="get" class="form-inline">
 
-	<input type="search" name="search" class="form-control mr-sm-2"
-		required placeholder="Nombre del material" aria-label="Search">
-	<input class="btn btn-primary my-2 my-sm-0" type="submit"
-		value="BUSCAR">
+	<input type="hidden" name="op"
+		value="<%=BackofficeMaterialesController.OP_BUSQUEDA%>"> <input
+		type="search" name="search" class="form-control mr-sm-2" required
+		placeholder="Nombre del material" aria-label="Search"> <input
+		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
+	<a class="btn btn-warning my-2 my-sm-0"
+		href="backoffice/materiales?op=-1">LIMPIAR</a>
 
 </form>
+<hr>
 
-<a href="backoffice/materiales/form.jsp"
-	class="btn btn-primary my-2 my-sm-0">Materiales Form</a>
+<a
+	href="backoffice/materiales?id=-1&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>"
+	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
 
 <hr>
 
@@ -38,17 +45,20 @@
 	</thead>
 	<tbody>
 		<c:forEach items="${materiales}" var="material">
-			<tr>
-				<td>${material.id}</td>
-				<td>${material.nombre}</td>
-				<td>${material.precio}€</td>
-			</tr>
+			
+				<tr>				
+					<td>${material.id}</td>
+					<td><a href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
+					<td>${material.precio}€</td>					
+				</tr>
+			
 		</c:forEach>
+
 	</tbody>
 </table>
 
 
-<%-- ${materiales} --%>
+
 
 
 

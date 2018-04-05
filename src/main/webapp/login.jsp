@@ -13,7 +13,8 @@
         <input type="text" class="form-control"
                name="usuario" 
                placeholder="Nombre Usuario" 
-               required autofocus>
+               required autofocus
+               value="admin">
                
         <label for="usuario">Nombre Usuario</label>
       </div>
@@ -22,7 +23,8 @@
         <input type="password" 
                name="password" 
                class="form-control" 
-               placeholder="Contraseña" required>
+               placeholder="Contraseña" required
+               value="admin">
                
         <label for="password">Contraseña</label>
       </div>

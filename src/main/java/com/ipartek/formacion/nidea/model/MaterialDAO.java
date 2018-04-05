@@ -1,7 +1,6 @@
 package com.ipartek.formacion.nidea.model;
 
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -48,9 +47,12 @@ public class MaterialDAO {
 
 		try {
 
-			Class.forName("com.mysql.jdbc.Driver");
-			final String URL = "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno";
-			con = DriverManager.getConnection(URL);
+			// Class.forName("com.mysql.jdbc.Driver");
+			// final String URL =
+			// "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno";
+			// con = DriverManager.getConnection(URL);
+
+			con = ConnectionManager.getConnection();
 			String sql = "SELECT id, nombre, precio FROM material;";
 
 			pst = con.prepareStatement(sql);
@@ -98,11 +100,13 @@ public class MaterialDAO {
 
 		try {
 
-			Class.forName("com.mysql.jdbc.Driver");
-			final String URL = "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno";
-			con = DriverManager.getConnection(URL);
-			String sql = "SELECT id, nombre, precio FROM spoty.material WHERE nombre LIKE '%" + search
-					+ "%' ORDER BY id DESC LIMIT 500;";
+			// Class.forName("com.mysql.jdbc.Driver");
+			// final String URL =
+			// "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno";
+			// con = DriverManager.getConnection(URL);
+
+			con = ConnectionManager.getConnection();
+			String sql = "SELECT id, nombre, precio FROM material WHERE nombre LIKE '%" + search + "%' ORDER BY id DESC LIMIT 500;";
 
 			pst = con.prepareStatement(sql);
 			rs = pst.executeQuery();
@@ -138,6 +142,59 @@ public class MaterialDAO {
 		}
 
 		return lista;
+	}
+
+	public Material findById(int id) {
+
+		ArrayList<Material> lista = new ArrayList<Material>();
+		Connection con = null;
+		PreparedStatement pst = null;
+		ResultSet rs = null;
+
+		Material m = null;
+
+		try {
+
+			// Class.forName("com.mysql.jdbc.Driver");
+			// final String URL =
+			// "jdbc:mysql://192.168.0.42/spoty?user=alumno&password=alumno";
+			// con = DriverManager.getConnection(URL);
+
+			con = ConnectionManager.getConnection();
+			String sql = "SELECT id, nombre, precio FROM material WHERE id=" + id + ";";
+
+			pst = con.prepareStatement(sql);
+			rs = pst.executeQuery();
+
+			while (rs.next()) {
+				m = new Material();
+				m.setId(rs.getInt("id"));
+				m.setNombre(rs.getString("nombre"));
+				m.setPrecio(rs.getFloat("precio"));
+			}
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+
+			try {
+				if (rs != null) {
+					rs.close();
+				}
+
+				if (pst != null) {
+					pst.close();
+				}
+
+				if (con != null) {
+					con.close();
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		return m;
 	}
 
 }
