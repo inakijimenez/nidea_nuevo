@@ -15,7 +15,7 @@
 		<a class="p-2 text-dark" href="materiales">Materiales</a>
 	</nav>
 	<span class="badge badge-success">${usuario }</span>
-	<a class="p-2 text-dark" href="backoffice/materiales?op=-1">Materiales Backoffice</a>
+	<a class="p-2 text-dark" href="backoffice/materiales">Materiales Backoffice</a>
 	<c:if test="${empty usuario }">
 		<a class="btn btn-outline-primary" href="login">Login</a>
 	</c:if>

@@ -1,0 +1,17 @@
+getALL
+SELECT id, nombre, precio FROM `material` ORDER BY id DESC LIMIT 500;
+
+findById
+SELECT id, nombre, precio FROM `material` WHERE id=8;
+
+findByName
+SELECT id, nombre, precio FROM `material` WHERE nombre LIKE '%a%' ORDER BY id DESC LIMIT 500;
+
+update
+UPDATE `material` SET `nombre`='beer', `precio`='45.7' WHERE  `id`=8;
+
+create
+INSERT INTO `material` (`nombre`, `precio`) VALUES ('jugger', '1.25');
+
+delete
+DELETE FROM `material` WHERE  `id`=8;

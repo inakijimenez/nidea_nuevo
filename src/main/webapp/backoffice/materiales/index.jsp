@@ -8,14 +8,14 @@
 
 <%@include file="/templates/head.jsp"%>
 <%@include file="/templates/navbar.jsp"%>
-<%@include file="/templates/alert.jsp"%>
+
 
 
 
 <h1>Backoffice Materiales</h1>
 <hr>
 
-
+<%@include file="/templates/alert.jsp"%>
 <form action="backoffice/materiales" method="get" class="form-inline">
 
 	<input type="hidden" name="op"
@@ -32,6 +32,10 @@
 <a
 	href="backoffice/materiales?id=-1&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
+	
+<a
+	href="backoffice/materiales?op=<%=BackofficeMaterialesController.OP_MOSTRAR_CRUD%>"
+	class="btn btn-success my-2 my-sm-0">Operaciones de CRUD</a>
 
 <hr>
 
