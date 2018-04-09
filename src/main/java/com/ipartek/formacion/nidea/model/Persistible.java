@@ -1,12 +1,17 @@
 package com.ipartek.formacion.nidea.model;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
+
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.MySQLDataException;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 public interface Persistible<P> {
 
 	/**
-	 * Lista una tabla de la base de datos ordenado por id descendente y limitado a
-	 * 500
+	 * Lista una tabla de la base de datos ordenado por id descendente y limitado a 500
 	 * 
 	 * @return devuelve una coleccion
 	 */
@@ -27,8 +32,10 @@ public interface Persistible<P> {
 	 * 
 	 * @param pojo
 	 * @return
+	 * @throws MySQLIntegrityConstraintViolationException
+	 * @throws MySQLDataException
 	 */
-	public boolean save(P pojo);
+	public boolean save(P pojo) throws MySQLIntegrityConstraintViolationException, MysqlDataTruncation;
 
 	/**
 	 * borra registros de la bbdd por su identificador
@@ -37,5 +44,14 @@ public interface Persistible<P> {
 	 * @return
 	 */
 	public boolean delete(int id);
+
+	/**
+	 * Nos mapea un resultado de la bbdd a un pojo
+	 * 
+	 * @param rs
+	 *            ResultSet un registro de la consulta
+	 * @return Pojo con los valores de rs o null si no hay valores
+	 */
+	public P mapper(ResultSet rs) throws SQLException;
 
 }

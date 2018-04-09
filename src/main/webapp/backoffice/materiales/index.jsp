@@ -11,7 +11,6 @@
 
 
 
-
 <h1>Backoffice Materiales</h1>
 <hr>
 
@@ -32,7 +31,7 @@
 <a
 	href="backoffice/materiales?id=-1&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
-	
+
 <a
 	href="backoffice/materiales?op=<%=BackofficeMaterialesController.OP_MOSTRAR_CRUD%>"
 	class="btn btn-success my-2 my-sm-0">Operaciones de CRUD</a>
@@ -49,19 +48,22 @@
 	</thead>
 	<tbody>
 		<c:forEach items="${materiales}" var="material">
-			
-				<tr>				
-					<td>${material.id}</td>
-					<td><a href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
-					<td>${material.precio}€</td>					
-				</tr>
-			
+
+			<tr>
+				<td>${material.id}</td>
+				<td><a
+					href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
+				<td>${material.precio}€</td>
+			</tr>
+
 		</c:forEach>
 
 	</tbody>
 </table>
 
-
+<script type="text/javascript">
+	window.history.pushState({}, "hidden", "backoffice/materiales");
+</script>
 
 
 

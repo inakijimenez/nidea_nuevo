@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletResponse;
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.mysql.jdbc.MysqlDataTruncation;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
 /**
  * Servlet implementation class BackofficeMateriales
@@ -60,18 +62,18 @@ public class BackofficeMaterialesController extends HttpServlet {
 	}
 
 	/**
-	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
 	/**
-	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
-	 *      response)
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 		doProcess(request, response);
 	}
 
@@ -83,7 +85,8 @@ public class BackofficeMaterialesController extends HttpServlet {
 	 * @throws IOException
 	 * @throws ServletException
 	 */
-	private void doProcess(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	private void doProcess(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		try {
 
@@ -117,9 +120,21 @@ public class BackofficeMaterialesController extends HttpServlet {
 				break;
 			}
 
+		} catch (NumberFormatException e) {
+
+			Material material = new Material();
+			material.setId(id);
+			material.setNombre(nombre);
+			material.setPrecio(precio);
+
+			dispatcher = request.getRequestDispatcher(VIEW_FORM);
+			request.setAttribute("material", material);
+			alert = new Alert("El precio debe contener solo numeros. No se ha guardado el registro",
+					Alert.TIPO_WARNING);
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			// dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 			listar(request);
 			alert = new Alert();
 
@@ -138,21 +153,30 @@ public class BackofficeMaterialesController extends HttpServlet {
 		material.setNombre(nombre);
 		material.setPrecio(precio);
 
-		if (id == -1) {
-			if (dao.save(material)) {
-				alert = new Alert("Se ha creado un nuevo registro", Alert.TIPO_PRIMARY);
-			} else {
-				alert = new Alert("Ha habido un error al crear", Alert.TIPO_WARNING);
-			}
+		if (material.getPrecio() <= 0) {
+			alert = new Alert("El precio debe ser mayor a 0. No se ha guardado el registro", Alert.TIPO_WARNING);
+
+		} else if (material.getNombre().equals("")) {
+			alert = new Alert("El nombre no puede estar vacio. No se ha guardado el registro", Alert.TIPO_WARNING);
 
 		} else {
-			if (dao.save(material)) {
-				alert = new Alert("Se ha modificado el registro con id: " + id, Alert.TIPO_WARNING);
-			} else {
-				alert = new Alert("Ha habido un error al modificar", Alert.TIPO_WARNING);
-			}
 
-			// material = dao.getById(id);
+			try {
+				if (dao.save(material)) {
+					alert = new Alert("Se ha guardado el registro", Alert.TIPO_PRIMARY);
+				} else {
+					alert = new Alert("Ha habido un error al guardar", Alert.TIPO_DANGER);
+				}
+			} catch (MySQLIntegrityConstraintViolationException e) {
+				alert = new Alert("Material duplicado. No se ha podido crear", Alert.TIPO_WARNING);
+				request.setAttribute("material", material);
+				// e.printStackTrace();
+			} catch (MysqlDataTruncation e) {
+				dispatcher = request.getRequestDispatcher(VIEW_FORM);
+
+				alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
+						Alert.TIPO_WARNING);
+			}
 		}
 
 		request.setAttribute("material", material);
@@ -222,10 +246,14 @@ public class BackofficeMaterialesController extends HttpServlet {
 			id = Integer.parseInt(request.getParameter("id"));
 		}
 
-		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre") : "";
+		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
 
-		if (request.getParameter("precio") != null) {
-			precio = Float.parseFloat(request.getParameter("precio"));
+		try {
+			if (request.getParameter("precio") != null) {
+				precio = Float.parseFloat(request.getParameter("precio"));
+			}
+		} catch (NumberFormatException e) {
+			throw e;
 		}
 
 	}
