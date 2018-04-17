@@ -87,8 +87,7 @@ public class BackofficeRolesController extends HttpServlet {
 				break;
 
 			case OP_ELIMINAR:
-				alert = new Alert("Eliminado", Alert.TIPO_WARNING);
-				dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+				eliminar(request);
 				break;
 
 			case OP_GUARDAR:
@@ -112,7 +111,15 @@ public class BackofficeRolesController extends HttpServlet {
 			request.setAttribute("alert", alert);
 			dispatcher.forward(request, response);
 		}
+	}
 
+	private void eliminar(HttpServletRequest request) {
+		if(dao.delete(id)) {
+			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
+		} else {
+			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
+		}
+		listar(request);		
 	}
 
 	private void guardar(HttpServletRequest request) {
@@ -130,7 +137,7 @@ public class BackofficeRolesController extends HttpServlet {
 					alert = new Alert("Ha habido un error al guardar", Alert.TIPO_DANGER);
 				}
 			} catch (MySQLIntegrityConstraintViolationException e) {
-				alert = new Alert("Rol duplicado. No se ha podido crear", Alert.TIPO_WARNING);
+				alert = new Alert("Rol duplicado. No se ha podido guardar", Alert.TIPO_WARNING);
 				request.setAttribute("rol", rol);
 
 			} catch (MysqlDataTruncation e) {
@@ -142,7 +149,6 @@ public class BackofficeRolesController extends HttpServlet {
 
 		request.setAttribute("rol", rol);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-
 	}
 
 	private void mostrarFormulario(HttpServletRequest request) {
@@ -153,7 +159,6 @@ public class BackofficeRolesController extends HttpServlet {
 		}
 		request.setAttribute("rol", rol);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
-
 	}
 
 	private void recogerParametros(HttpServletRequest request) {
@@ -177,7 +182,6 @@ public class BackofficeRolesController extends HttpServlet {
 
 		request.setAttribute("roles", roles);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-
 	}
 
 }

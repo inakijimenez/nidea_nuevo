@@ -55,18 +55,18 @@ public class BackofficeFilter implements Filter {
 	 */
 	private void informacionPeticion(HttpServletRequest req) {
 
-		System.out.println("*************************** ACCESO DENEGADO ****************************");
-
-		System.out.println("IP=" + req.getLocalAddr());
-		System.out.println("URL=" + req.getRequestURL());
-		System.out.println("URI=" + req.getRequestURI());
-		System.out.println("PORT=" + req.getRemotePort());
-
-		System.out.println("**************************** ENCABEZADOS *******************************");
-
-		System.out.println("Navegador=" + req.getHeader("user-agent"));
-
-		System.out.println("***********************************************************************");
+//		System.out.println("*************************** ACCESO DENEGADO ****************************");
+//
+//		System.out.println("IP=" + req.getLocalAddr());
+//		System.out.println("URL=" + req.getRequestURL());
+//		System.out.println("URI=" + req.getRequestURI());
+//		System.out.println("PORT=" + req.getRemotePort());
+//
+//		System.out.println("**************************** ENCABEZADOS *******************************");
+//
+//		System.out.println("Navegador=" + req.getHeader("user-agent"));
+//
+//		System.out.println("***********************************************************************");
 	}
 
 	/**

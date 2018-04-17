@@ -227,7 +227,6 @@ public class MaterialDAO implements Persistible<Material> {
 		PreparedStatement pst = null;
 
 		try {
-
 			con = ConnectionManager.getConnection();
 			String sql = "DELETE FROM `material` WHERE  `id`= ?;";
 
@@ -239,17 +238,16 @@ public class MaterialDAO implements Persistible<Material> {
 			if (affetedRows == 1) {
 				resultado = true;
 			}
-
+			
 		} catch (Exception e) {
 			e.printStackTrace();
+			
 		} finally {
-
 			try {
 
 				if (pst != null) {
 					pst.close();
 				}
-
 				if (con != null) {
 					con.close();
 				}

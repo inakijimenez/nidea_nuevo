@@ -188,8 +188,24 @@ public class RolDAO implements Persistible<Rol> {
 
 	@Override
 	public boolean delete(int id) {
-		// TODO Auto-generated method stub
-		return false;
+		boolean resultado = false;
+		String sql = "DELETE FROM `rol` WHERE  `id`= ?;";
+		
+		try (Connection con = ConnectionManager.getConnection();
+				PreparedStatement pst = con.prepareStatement(sql);){			
+
+			pst.setInt(1, id);
+
+			int affetedRows = pst.executeUpdate();
+			if (affetedRows == 1) {
+				resultado = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();			
+		} 
+
+		return resultado;
 	}
 
 	@Override

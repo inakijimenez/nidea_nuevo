@@ -25,9 +25,6 @@ public class LoginController extends HttpServlet {
 	private String view = "";
 	private Alert alert = new Alert();
 
-	private static final String USER = "admin";
-	private static final String PASS = "admin";
-
 	private static final int SESSION_EXPIRATION = -1; // No expira nunca
 
 	/**
@@ -49,12 +46,7 @@ public class LoginController extends HttpServlet {
 			throws ServletException, IOException {
 
 		try {
-
-			ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-
 			UsuarioDAO dao = UsuarioDAO.getInstance();
-			usuarios = dao.getAll();
-
 			Usuario usuario = new Usuario();
 
 			String nombre = request.getParameter("usuario");
@@ -68,12 +60,11 @@ public class LoginController extends HttpServlet {
 					if (usuario.getPassword().equals(password)) { // se compara con la password y si existe se le asigan
 																	// una redireccion basandose en el id_rol
 						alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
-						if (usuario.getRol() == 1) {
-							view = "backoffice/materiales";
-						} else if (usuario.getRol() == 2) {
+						if (usuario.getRol().getId() == 1) {
+							view = "backoffice/index.jsp";
+						} else if (usuario.getRol().getId() == 2) {
 							view = "materiales";
 						}
-
 						HttpSession session = request.getSession();
 						session.setAttribute("usuario", usuario);
 						session.setMaxInactiveInterval(SESSION_EXPIRATION);

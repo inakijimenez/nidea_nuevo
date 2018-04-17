@@ -99,7 +99,7 @@ public class UsuarioDAO implements Persistible<Usuario> {
 			usuario.setId(rs.getInt("id"));
 			usuario.setNombre(rs.getString("nombre"));
 			usuario.setPassword(rs.getString("password"));
-			usuario.setRol(rs.getInt("id_rol"));
+			usuario.getRol().setId(rs.getInt("id_rol"));
 		}
 
 		return usuario;
