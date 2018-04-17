@@ -12,6 +12,7 @@
 <h1>Backoffice</h1>
 
 <a href="backoffice/materiales" type="button" class="btn btn-primary">Materiales</a>
+<a href="backoffice/usuarios" type="button" class="btn btn-primary">Usuarios</a>
 
 
 

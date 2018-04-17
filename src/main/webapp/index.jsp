@@ -9,6 +9,10 @@
 	// varias sentencias 
 	String nombre = "pepe";
 	String hora = "10:78";
+	
+	//Lanza un nullpointerexception para probar el error page
+	//String error = null;
+	//error.length();
 
 %>
 

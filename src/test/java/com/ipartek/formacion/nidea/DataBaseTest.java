@@ -23,7 +23,7 @@ public class DataBaseTest {
 
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
-			fail("No existe driver para mysql, � Tienes el .JAR ?");
+			fail("No existe driver para mysql, ¿ Tienes el .JAR ?");
 		}
 	}
 

@@ -1,6 +1,7 @@
 package com.ipartek.formacion.nidea.controller;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -9,7 +10,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 
 /**
  * Servlet implementation class LoginController
@@ -31,7 +34,8 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		request.getRequestDispatcher("login.jsp").forward(request, response);
 
@@ -41,30 +45,48 @@ public class LoginController extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse
 	 *      response)
 	 */
-	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+	protected void doPost(HttpServletRequest request, HttpServletResponse response)
+			throws ServletException, IOException {
 
 		try {
 
-			String usuario = request.getParameter("usuario");
+			ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
+
+			UsuarioDAO dao = UsuarioDAO.getInstance();
+			usuarios = dao.getAll();
+
+			Usuario usuario = new Usuario();
+
+			String nombre = request.getParameter("usuario");
 			String password = request.getParameter("password");
 
-			if (USER.equalsIgnoreCase(usuario) && PASS.equals(password)) {
+			if (nombre != null && password != null && !"".equals(nombre) && !"".equals(password)) {
 
-				// guardar datos de usuario
-				HttpSession session = request.getSession();
-				session.setAttribute("usuario", usuario);
+				usuario = dao.getByExactName(nombre);
 
-				// tiempo de expiracion de session - un valor negativo indica que nunca expira
-				/*
-				 * tbn se puede configurar en el web.xml <!-- Session Configuration -->
-				 * <session-config> <session-timeout>60</session-timeout> </session-config>
-				 */
-				session.setMaxInactiveInterval(SESSION_EXPIRATION);
+				if (usuario.getId() != -1) { // si el nombre de usuario existe
+					if (usuario.getPassword().equals(password)) { // se compara con la password y si existe se le asigan
+																	// una redireccion basandose en el id_rol
+						alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
+						if (usuario.getRol() == 1) {
+							view = "backoffice/materiales";
+						} else if (usuario.getRol() == 2) {
+							view = "materiales";
+						}
 
-				view = "backoffice/index.jsp";
-				alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
+						HttpSession session = request.getSession();
+						session.setAttribute("usuario", usuario);
+						session.setMaxInactiveInterval(SESSION_EXPIRATION);
+
+					} else {
+						alert = new Alert("La contraseña es incorrecta", Alert.TIPO_DANGER);
+						view = "login.jsp";
+					}
+				} else {
+					alert = new Alert("El nombre de usuario no existe", Alert.TIPO_DANGER);
+					view = "login.jsp";
+				}
 			} else {
-
 				view = "login.jsp";
 				alert = new Alert("Credenciales incorrectas, prueba de nuevo");
 			}

@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.util.Utilidades;
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
@@ -113,30 +114,6 @@ public class MaterialDAO implements Persistible<Material> {
 
 		return lista;
 
-		/*
-		 * ArrayList<Material> lista = new ArrayList<Material>(); Connection con = null; PreparedStatement pst = null;
-		 * ResultSet rs = null;
-		 * 
-		 * try {
-		 * 
-		 * con = ConnectionManager.getConnection(); String sql =
-		 * "SELECT id, nombre, precio FROM material WHERE nombre LIKE '%" + search + "%' ORDER BY id DESC LIMIT 500;";
-		 * 
-		 * pst = con.prepareStatement(sql); rs = pst.executeQuery();
-		 * 
-		 * Material m = null; while (rs.next()) { m = new Material(); m.setId(rs.getInt("id"));
-		 * m.setNombre(rs.getString("nombre")); m.setPrecio(rs.getFloat("precio")); lista.add(m); }
-		 * 
-		 * } catch (Exception e) { e.printStackTrace(); } finally {
-		 * 
-		 * try { if (rs != null) { rs.close(); }
-		 * 
-		 * if (pst != null) { pst.close(); }
-		 * 
-		 * if (con != null) { con.close(); } } catch (SQLException e) { e.printStackTrace(); } }
-		 * 
-		 * return lista;
-		 */
 	}
 
 	@Override
@@ -171,6 +148,9 @@ public class MaterialDAO implements Persistible<Material> {
 
 		if (pojo != null) {
 
+			// Sanitize nombre
+			pojo.setNombre(Utilidades.limpiarEspacios(pojo.getNombre()));
+
 			if (pojo.getId() == -1) {
 				resultado = crear(pojo);
 			} else {
@@ -193,9 +173,9 @@ public class MaterialDAO implements Persistible<Material> {
 			pst.setFloat(2, pojo.getPrecio());
 			pst.setInt(3, pojo.getId());
 
-			int affetedRows = pst.executeUpdate();
+			int affectedRows = pst.executeUpdate();
 
-			if (affetedRows == 1) {
+			if (affectedRows == 1) {
 				resultado = true;
 			}
 		} catch (Exception e) {

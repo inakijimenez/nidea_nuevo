@@ -120,18 +120,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 				break;
 			}
 
-		} catch (NumberFormatException e) {
-
-			Material material = new Material();
-			material.setId(id);
-			material.setNombre(nombre);
-			material.setPrecio(precio);
-
-			dispatcher = request.getRequestDispatcher(VIEW_FORM);
-			request.setAttribute("material", material);
-			alert = new Alert("El precio debe contener solo numeros. No se ha guardado el registro",
-					Alert.TIPO_WARNING);
-
 		} catch (Exception e) {
 			e.printStackTrace();
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
@@ -151,32 +139,45 @@ public class BackofficeMaterialesController extends HttpServlet {
 		Material material = new Material();
 		material.setId(id);
 		material.setNombre(nombre);
-		material.setPrecio(precio);
 
-		if (material.getPrecio() <= 0) {
-			alert = new Alert("El precio debe ser mayor a 0. No se ha guardado el registro", Alert.TIPO_WARNING);
-
-		} else if (material.getNombre().equals("")) {
-			alert = new Alert("El nombre no puede estar vacio. No se ha guardado el registro", Alert.TIPO_WARNING);
-
-		} else {
-
-			try {
-				if (dao.save(material)) {
-					alert = new Alert("Se ha guardado el registro", Alert.TIPO_PRIMARY);
-				} else {
-					alert = new Alert("Ha habido un error al guardar", Alert.TIPO_DANGER);
-				}
-			} catch (MySQLIntegrityConstraintViolationException e) {
-				alert = new Alert("Material duplicado. No se ha podido crear", Alert.TIPO_WARNING);
-				request.setAttribute("material", material);
-				// e.printStackTrace();
-			} catch (MysqlDataTruncation e) {
-				dispatcher = request.getRequestDispatcher(VIEW_FORM);
-
-				alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
-						Alert.TIPO_WARNING);
+		try {
+			if (request.getParameter("precio") != null) {
+				precio = Float.parseFloat(request.getParameter("precio"));
+				material.setPrecio(precio);
 			}
+
+			if (material.getPrecio() <= 0) {
+				alert = new Alert("El precio debe ser mayor a 0. No se ha guardado el registro", Alert.TIPO_WARNING);
+
+			} else if (material.getNombre().equals("")) {
+				alert = new Alert("El nombre no puede estar vacio. No se ha guardado el registro", Alert.TIPO_WARNING);
+
+			} else {
+
+				try {
+					if (dao.save(material)) {
+						alert = new Alert("Se ha guardado el registro", Alert.TIPO_PRIMARY);
+					} else {
+						alert = new Alert("Ha habido un error al guardar", Alert.TIPO_DANGER);
+					}
+				} catch (MySQLIntegrityConstraintViolationException e) {
+					alert = new Alert("Material duplicado. No se ha podido crear", Alert.TIPO_WARNING);
+					request.setAttribute("material", material);
+					// e.printStackTrace();
+				} catch (MysqlDataTruncation e) {
+					dispatcher = request.getRequestDispatcher(VIEW_FORM);
+
+					alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
+							Alert.TIPO_WARNING);
+				}
+			}
+		} catch (NumberFormatException e) {
+
+			dispatcher = request.getRequestDispatcher(VIEW_FORM);
+			request.setAttribute("material", material);
+			alert = new Alert("El precio debe contener solo numeros. No se ha guardado el registro",
+					Alert.TIPO_WARNING);
+
 		}
 
 		request.setAttribute("material", material);
@@ -247,14 +248,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 		}
 
 		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
-
-		try {
-			if (request.getParameter("precio") != null) {
-				precio = Float.parseFloat(request.getParameter("precio"));
-			}
-		} catch (NumberFormatException e) {
-			throw e;
-		}
 
 	}
 

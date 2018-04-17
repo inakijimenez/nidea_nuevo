@@ -24,6 +24,8 @@
 <script>
 	$(document).ready(function() {
 		$('#table-materiales').DataTable();
+		$('#table-usuarios').DataTable();
+		$('#table-roles').DataTable();
 	});
 </script>
 </body>

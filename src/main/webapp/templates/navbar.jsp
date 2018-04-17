@@ -13,9 +13,15 @@
 		<a class="p-2 text-dark" href="generar-mesa">Mesa</a> 
 		<a class="p-2 text-dark" href="calculadora">Calculadora</a>
 		<a class="p-2 text-dark" href="materiales">Materiales</a>
+		
 	</nav>
-	<span class="badge badge-success">${usuario }</span>
-	<a class="p-2 text-dark" href="backoffice/materiales">Materiales Backoffice</a>
+<%-- 	<span class="badge badge-success">${usuario }</span> --%>
+	<span>BACKOFFICE</span>
+	<a class="p-2 text-dark" href="backoffice/materiales">Materiales</a>
+	<a class="p-2 text-dark" href="backoffice/usuarios">Usuarios</a>
+	<a class="p-2 text-dark" href="backoffice/roles">Roles</a>
+	
+	<a class="btn btn-outline-primary" href="login-usuario">Login Usuario</a>
 	<c:if test="${empty usuario }">
 		<a class="btn btn-outline-primary" href="login">Login</a>
 	</c:if>
