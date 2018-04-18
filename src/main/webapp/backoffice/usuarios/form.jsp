@@ -31,7 +31,7 @@
 			required value="${usuario.rol.id }">
 	</div>
 	<div class="form-group">
-		<select name="id_rol">
+		<select name="id_rol" class="form-control">
 			<c:forEach items="${roles }" var="rol">
 				<option value="${rol.id }" ${rol.id == usuario.rol.id?'selected':''}>${rol.nombre }</option>
 			</c:forEach>

@@ -29,6 +29,11 @@
 </form>
 <hr>
 
+<a
+	href="backoffice/usuarios?id=-1&op=<%=BackofficeUsuariosController.OP_MOSTRAR_FORMULARIO%>"
+	class="btn btn-success my-2 my-sm-0">Nuevo Usuario</a>
+<hr>
+
 <table id="table-usuarios" class="display">
 	<thead>
 		<tr>
