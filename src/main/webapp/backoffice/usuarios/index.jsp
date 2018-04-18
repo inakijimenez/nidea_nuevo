@@ -1,3 +1,4 @@
+<%@page import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeUsuariosController"%>
 <%@page
 	import="com.ipartek.formacion.nidea.controller.backoffice.BackofficeMaterialesController"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -15,24 +16,37 @@
 <hr>
 
 <%@include file="/templates/alert.jsp"%>
+<form action="backoffice/usuarios" method="get" class="form-inline">
 
-${usuarios_conectados}
-${uPublic}
+	<input type="hidden" name="op"
+		value="<%=BackofficeUsuariosController.OP_BUSQUEDA%>"> <input
+		type="search" name="search" class="form-control mr-sm-2" required
+		placeholder="Nombre del Usuario" aria-label="Search"> <input
+		class="btn btn-primary my-2 my-sm-0" type="submit" value="BUSCAR">
+	<a class="btn btn-warning my-2 my-sm-0"
+		href="backoffice/usuarios?op=-1">LIMPIAR</a>
+
+</form>
+<hr>
 
 <table id="table-usuarios" class="display">
 	<thead>
 		<tr>
-			<th>Id</th>
-			<th>Nombre</th>
+			<th>Id Usuario</th>
+			<th>Nombre Usuario</th>
+			<th>Id Rol</th>
+			<th>Nombre Rol</th>
 			
 		</tr>
 	</thead>
 	<tbody>
-		<c:forEach items="${usuarios_conectados}" var="usuario">
+		<c:forEach items="${usuarios}" var="usuario">
 
 			<tr>
-				<td>${usuario.key}</td>
-				<td>${usuario.value.nombre}</td>
+				<td>${usuario.id}</td>
+				<td>${usuario.nombre}</td>
+				<td>${usuario.rol.id}</td>
+				<td>${usuario.rol.nombre}</td>
 			</tr>
 
 		</c:forEach>

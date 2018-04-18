@@ -15,20 +15,15 @@ public class RolDAO implements Persistible<Rol> {
 
 	private static RolDAO INSTANCE = null;
 
-	// No se puede hacer news de esta clase pq se bloquea con este metodo al ser
-	// private
 	private RolDAO() {
 	}
 
-	// creador synchronyzed para protegerse de posibles problemas multi-hilo
 	private synchronized static void createInstance() {
 		if (INSTANCE == null) {
 			INSTANCE = new RolDAO();
 		}
 	}
 
-	// A este metodo pueden acceder multiples usuarios a la vez y ejecutarlo pero al
-	// creador solo uno por estar synchronyzed
 	public static RolDAO getInstance() {
 		if (INSTANCE == null) {
 			createInstance();
@@ -58,24 +53,37 @@ public class RolDAO implements Persistible<Rol> {
 	@Override
 	public Rol getById(int id) {
 		Rol rol = new Rol();
-
 		String sql = "SELECT `id`, `nombre` FROM `rol` WHERE `id` = ?;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
-
 			pst.setInt(1, id);
-
 			try (ResultSet rs = pst.executeQuery()) {
 				if (rs.next()) {
 					rol = mapper(rs);
 				}
 			}
-
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
 		return rol;
+	}
+
+	public ArrayList<Rol> getByName(String search) {
+
+		ArrayList<Rol> lista = new ArrayList<Rol>();
+		String sql = "SELECT id, nombre FROM rol WHERE nombre LIKE ? ORDER BY id DESC LIMIT 500;";
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
+			pst.setString(1, "%" + search + "%");
+			try (ResultSet rs = pst.executeQuery()) {
+				while (rs.next()) {
+					lista.add(mapper(rs));
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lista;
 	}
 
 	@Override
@@ -108,13 +116,8 @@ public class RolDAO implements Persistible<Rol> {
 
 			resultado = doSave(pst, pojo);
 
-			// int affectedRows = pst.executeUpdate();
-			// if (affectedRows == 1) {
-			// resultado = true;
-			// }
-
 		} catch (MySQLIntegrityConstraintViolationException e) {
-			System.out.println("Material duplicado");
+			System.out.println("Rol duplicado");
 			throw e;
 		} catch (MysqlDataTruncation e) {
 			System.out.println("Nombre muy largo");
@@ -134,20 +137,9 @@ public class RolDAO implements Persistible<Rol> {
 			pst.setString(1, pojo.getNombre());
 
 			resultado = doSave(pst, pojo);
-			//
-			// int affectedRows = pst.executeUpdate();
-			//
-			// if (affectedRows == 1) {
-			// try (ResultSet generatedKeys = pst.getGeneratedKeys()) {
-			// if (generatedKeys.next()) {
-			// pojo.setId(generatedKeys.getInt(1));
-			// }
-			// }
-			// resultado = true;
-			// }
 
 		} catch (MySQLIntegrityConstraintViolationException e) {
-			System.out.println("Material duplicado");
+			System.out.println("Rol duplicado");
 			throw e;
 		} catch (MysqlDataTruncation e) {
 			System.out.println("Nombre muy largo");
@@ -174,7 +166,7 @@ public class RolDAO implements Persistible<Rol> {
 				resultado = true;
 			}
 		} catch (MySQLIntegrityConstraintViolationException e) {
-			System.out.println("Material duplicado");
+			System.out.println("Rol duplicado");
 			throw e;
 		} catch (MysqlDataTruncation e) {
 			System.out.println("Nombre muy largo");
@@ -190,9 +182,8 @@ public class RolDAO implements Persistible<Rol> {
 	public boolean delete(int id) {
 		boolean resultado = false;
 		String sql = "DELETE FROM `rol` WHERE  `id`= ?;";
-		
-		try (Connection con = ConnectionManager.getConnection();
-				PreparedStatement pst = con.prepareStatement(sql);){			
+
+		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
 			pst.setInt(1, id);
 
@@ -200,10 +191,10 @@ public class RolDAO implements Persistible<Rol> {
 			if (affetedRows == 1) {
 				resultado = true;
 			}
-			
+
 		} catch (Exception e) {
-			e.printStackTrace();			
-		} 
+			e.printStackTrace();
+		}
 
 		return resultado;
 	}

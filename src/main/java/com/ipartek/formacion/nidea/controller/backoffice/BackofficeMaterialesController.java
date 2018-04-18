@@ -201,7 +201,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 		materiales = dao.getByName(search);
 		request.setAttribute("materiales", materiales);
 		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
-
 	}
 
 	private void listar(HttpServletRequest request) {
@@ -225,7 +224,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 			request.setAttribute("material", material);
 			dispatcher = request.getRequestDispatcher(VIEW_FORM);
 		}
-
 	}
 
 	/**

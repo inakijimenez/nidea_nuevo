@@ -14,6 +14,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.ipartek.formacion.nidea.pojo.Usuario;
+
 /**
  * Servlet Filter implementation class BackofficeFilter
  */
@@ -37,17 +39,16 @@ public class BackofficeFilter implements Filter {
 
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse res = (HttpServletResponse) response;
-
 		HttpSession session = req.getSession();
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
 
-		if (null != session.getAttribute("usuario")) {
+		if (null != usuario && usuario.getRol().getId() == Usuario.ROL_ADMIN) {
 			// pass the request along the filter chain
 			chain.doFilter(request, response);
 		} else {
 			informacionPeticion(req);
 			res.sendRedirect(req.getContextPath() + "/login");
 		}
-
 	}
 
 	/**
@@ -55,18 +56,18 @@ public class BackofficeFilter implements Filter {
 	 */
 	private void informacionPeticion(HttpServletRequest req) {
 
-//		System.out.println("*************************** ACCESO DENEGADO ****************************");
-//
-//		System.out.println("IP=" + req.getLocalAddr());
-//		System.out.println("URL=" + req.getRequestURL());
-//		System.out.println("URI=" + req.getRequestURI());
-//		System.out.println("PORT=" + req.getRemotePort());
-//
-//		System.out.println("**************************** ENCABEZADOS *******************************");
-//
-//		System.out.println("Navegador=" + req.getHeader("user-agent"));
-//
-//		System.out.println("***********************************************************************");
+		// System.out.println("*************************** ACCESO DENEGADO ****************************");
+		//
+		// System.out.println("IP=" + req.getLocalAddr());
+		// System.out.println("URL=" + req.getRequestURL());
+		// System.out.println("URI=" + req.getRequestURI());
+		// System.out.println("PORT=" + req.getRemotePort());
+		//
+		// System.out.println("**************************** ENCABEZADOS *******************************");
+		//
+		// System.out.println("Navegador=" + req.getHeader("user-agent"));
+		//
+		// System.out.println("***********************************************************************");
 	}
 
 	/**

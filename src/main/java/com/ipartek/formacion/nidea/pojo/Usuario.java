@@ -2,10 +2,13 @@ package com.ipartek.formacion.nidea.pojo;
 
 public class Usuario {
 
-	private	int id;
+	private int id;
 	private String nombre;
 	private String password;
 	private Rol rol;
+
+	public static final int ROL_ADMIN = 1;
+	public static final int ROL_USER = 2;
 
 	public Usuario() {
 		super();
@@ -37,7 +40,7 @@ public class Usuario {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	
+
 	public Rol getRol() {
 		return rol;
 	}

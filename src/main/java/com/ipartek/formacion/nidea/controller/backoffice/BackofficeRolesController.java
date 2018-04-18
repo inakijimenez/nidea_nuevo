@@ -82,8 +82,7 @@ public class BackofficeRolesController extends HttpServlet {
 				break;
 
 			case OP_BUSQUEDA:
-				alert = new Alert("Buscando", Alert.TIPO_WARNING);
-				dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+				buscar(request);
 				break;
 
 			case OP_ELIMINAR:
@@ -113,13 +112,20 @@ public class BackofficeRolesController extends HttpServlet {
 		}
 	}
 
+	private void buscar(HttpServletRequest request) {
+		ArrayList<Rol> roles = new ArrayList<Rol>();
+		roles = dao.getByName(search);
+		request.setAttribute("roles", roles);
+		dispatcher = request.getRequestDispatcher(VIEW_INDEX);
+	}
+
 	private void eliminar(HttpServletRequest request) {
-		if(dao.delete(id)) {
+		if (dao.delete(id)) {
 			alert = new Alert("Se ha eliminado el registro: " + id, Alert.TIPO_DANGER);
 		} else {
 			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
 		}
-		listar(request);		
+		listar(request);
 	}
 
 	private void guardar(HttpServletRequest request) {
@@ -167,6 +173,8 @@ public class BackofficeRolesController extends HttpServlet {
 		} else {
 			op = 0;
 		}
+
+		search = (request.getParameter("search") != null) ? request.getParameter("search") : "";
 
 		if (request.getParameter("id") != null) {
 			id = Integer.parseInt(request.getParameter("id"));
