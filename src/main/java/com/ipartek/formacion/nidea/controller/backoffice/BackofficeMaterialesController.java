@@ -1,19 +1,24 @@
 package com.ipartek.formacion.nidea.controller.backoffice;
 
 import java.io.IOException;
+import java.sql.SQLDataException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
@@ -136,9 +141,13 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 	private void guardar(HttpServletRequest request) {
 
+		HttpSession session = request.getSession();
+		Usuario usuario = (Usuario)session.getAttribute("usuario");
+		
 		Material material = new Material();
 		material.setId(id);
 		material.setNombre(nombre);
+		material.getUsuario().setId(usuario.getId());
 
 		try {
 			if (request.getParameter("precio") != null) {
@@ -169,7 +178,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 					alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
 							Alert.TIPO_WARNING);
-				}
+				} 
 			}
 		} catch (NumberFormatException e) {
 

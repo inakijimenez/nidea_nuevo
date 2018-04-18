@@ -35,7 +35,7 @@ public interface Persistible<P> {
 	 * @throws MySQLIntegrityConstraintViolationException
 	 * @throws MySQLDataException
 	 */
-	public boolean save(P pojo) throws MySQLIntegrityConstraintViolationException, MysqlDataTruncation;
+	public boolean save(P pojo) throws SQLException;
 
 	/**
 	 * borra registros de la bbdd por su identificador

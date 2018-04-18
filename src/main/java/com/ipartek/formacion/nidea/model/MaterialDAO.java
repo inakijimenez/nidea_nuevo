@@ -187,13 +187,14 @@ public class MaterialDAO implements Persistible<Material> {
 
 	private boolean crear(Material pojo) throws MySQLIntegrityConstraintViolationException, MysqlDataTruncation {
 		boolean resultado = false;
-		String sql = "INSERT INTO `material` (`nombre`, `precio`) VALUES (?, ?);";
+		String sql = "INSERT INTO `material` (`nombre`, `precio`, `id_usuario`) VALUES (?, ?, ?);";
 
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
+			pst.setInt(3, pojo.getUsuario().getId());
 
 			int affetedRows = pst.executeUpdate();
 
