@@ -10,7 +10,6 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
@@ -142,13 +141,13 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 	private void guardar(HttpServletRequest request) {
 
-		HttpSession session = request.getSession();
-		Usuario usuario = (Usuario) session.getAttribute("usuario");
+		// HttpSession session = request.getSession();
+		// Usuario usuario = (Usuario) session.getAttribute("usuario");
 
 		Material material = new Material();
 		material.setId(id);
 		material.setNombre(nombre);
-		material.getUsuario().setId(usuario.getId());
+		material.setUsuario(usuario);
 
 		try {
 			if (request.getParameter("precio") != null) {
@@ -162,6 +161,8 @@ public class BackofficeMaterialesController extends HttpServlet {
 			} else if (material.getNombre().equals("")) {
 				alert = new Alert("El nombre no puede estar vacio. No se ha guardado el registro", Alert.TIPO_WARNING);
 
+			} else if (null == material.getUsuario() || material.getUsuario().getId() == -1) {
+				alert = new Alert("Elige un usuario valido. No se ha guardado el registro", Alert.TIPO_WARNING);
 			} else {
 
 				try {
@@ -181,7 +182,9 @@ public class BackofficeMaterialesController extends HttpServlet {
 							Alert.TIPO_WARNING);
 				}
 			}
-		} catch (NumberFormatException e) {
+		} catch (
+
+		NumberFormatException e) {
 
 			dispatcher = request.getRequestDispatcher(VIEW_FORM);
 			request.setAttribute("material", material);
@@ -240,6 +243,8 @@ public class BackofficeMaterialesController extends HttpServlet {
 	 * @param request
 	 */
 	private void recogerParametros(HttpServletRequest request) {
+
+		usuario = null;
 
 		if (request.getParameter("op") != null) {
 			op = Integer.parseInt(request.getParameter("op"));
