@@ -46,6 +46,7 @@ public class BackofficeUsuariosController extends HttpServlet {
 
 	private int id_usuario;
 	private String nombre_usuario;
+	private String password;
 	private Rol rol;
 
 	private String search;
@@ -120,9 +121,7 @@ public class BackofficeUsuariosController extends HttpServlet {
 				break;
 			}
 
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			dispatcher = request.getRequestDispatcher(VIEW_INDEX);
 			listar(request);
@@ -157,6 +156,15 @@ public class BackofficeUsuariosController extends HttpServlet {
 		}
 
 		nombre_usuario = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
+
+		if (request.getParameter("password") != null) {
+			password = request.getParameter("password");
+		}
+
+		rol = null;
+		if (request.getParameter("id_rol") != null) {
+			rol = rolDAO.getById(Integer.parseInt(request.getParameter("id_rol")));
+		}
 	}
 
 	private void mostrarFormulario(HttpServletRequest request) {
@@ -180,11 +188,10 @@ public class BackofficeUsuariosController extends HttpServlet {
 		Usuario usuario = new Usuario();
 		usuario.setId(id_usuario);
 		usuario.setNombre(nombre_usuario);
+		usuario.setPassword(password);
+		usuario.setRol(rol);
 
 		try {
-			if (request.getParameter("id_rol") != null) {
-				usuario.getRol().setId(Integer.parseInt(request.getParameter("id_rol")));
-			}
 
 			// Validaciones Incorrectas
 			Set<ConstraintViolation<Usuario>> violations = validator.validate(usuario);
@@ -205,7 +212,7 @@ public class BackofficeUsuariosController extends HttpServlet {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
+		request.setAttribute("roles", rolDAO.getAll());
 		request.setAttribute("usuario", usuario);
 		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
@@ -218,7 +225,13 @@ public class BackofficeUsuariosController extends HttpServlet {
 	}
 
 	private void eliminar(HttpServletRequest request) {
-		// TODO Auto-generated method stub
+		if (dao.delete(id_usuario)) {
+			alert = new Alert("Se ha eliminado el registro: " + id_usuario, Alert.TIPO_DANGER);
+		} else {
+			alert = new Alert("Ha habido un error eliminando", Alert.TIPO_WARNING);
+		}
+
+		listar(request);
 
 	}
 }

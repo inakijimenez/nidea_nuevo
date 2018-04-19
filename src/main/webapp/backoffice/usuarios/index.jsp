@@ -49,7 +49,7 @@
 
 			<tr>
 				<td>${usuario.id}</td>
-				<td>${usuario.nombre}</td>
+				<td><a href="backoffice/usuarios?id=${usuario.id}&op=<%=BackofficeUsuariosController.OP_MOSTRAR_FORMULARIO %>">${usuario.nombre}</a></td>
 				<td>${usuario.rol.id}</td>
 				<td>${usuario.rol.nombre}</td>
 			</tr>

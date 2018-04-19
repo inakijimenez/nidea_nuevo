@@ -26,12 +26,13 @@
 			placeholder="Nombre Usuario" required value="${usuario.nombre }">
 	</div>
 	<div class="form-group">
-		<label for="id_rol">Rol:</label> <input type="number" step="1"
-			class="form-control" id="id_rol" name="id_rol" placeholder="Id Rol"
-			required value="${usuario.rol.id }">
+		<label for="password">Password:</label> <input type="password"
+			class="form-control" id="password" name="password"
+			placeholder="Password" required value="${usuario.password }">
 	</div>
 	<div class="form-group">
 		<select name="id_rol" class="form-control">
+			<option value="-1">Seleccione Rol</option>
 			<c:forEach items="${roles }" var="rol">
 				<option value="${rol.id }" ${rol.id == usuario.rol.id?'selected':''}>${rol.nombre }</option>
 			</c:forEach>
@@ -79,11 +80,11 @@
 							<p>${usuario.nombre }</p>
 						</div>
 						<div class="form-group">
-							<label for="precio">Id Rol:</label>
-							<p>${usuario.rol.id }</p>
+							<label for="precio">Rol:</label>
+							<p>${usuario.rol.nombre }</p>
 						</div>
 						<a class="btn btn-danger btn-block"
-							href="backoffice/materiales?id=${usuario.id}&op=<%=BackofficeUsuariosController.OP_ELIMINAR %>">Eliminar</a>
+							href="backoffice/usuarios?id=${usuario.id}&op=<%=BackofficeUsuariosController.OP_ELIMINAR %>">Eliminar</a>
 					</div>
 				</div>
 			</div>

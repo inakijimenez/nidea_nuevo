@@ -1,5 +1,6 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
@@ -15,6 +16,8 @@ public class Usuario {
 	@NotNull
 	private String password;
 
+	@NotNull(message = "Seleccione un rol valido")
+	@Valid
 	private Rol rol;
 
 	public static final int ROL_ADMIN = 1;
@@ -23,7 +26,7 @@ public class Usuario {
 	public Usuario() {
 		super();
 		this.id = -1;
-		this.nombre = "Unknown";
+		this.nombre = "";
 		this.rol = new Rol();
 	}
 

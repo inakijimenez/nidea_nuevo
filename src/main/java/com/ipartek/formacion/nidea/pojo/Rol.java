@@ -1,7 +1,10 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.constraints.Min;
+
 public class Rol {
 
+	@Min(value = 1, message = "Seleccione un rol valido")
 	private int id;
 	private String nombre;
 
