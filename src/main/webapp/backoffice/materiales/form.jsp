@@ -83,6 +83,10 @@
 							<label for="precio">Precio:</label>
 							<p>${material.precio }</p>
 						</div>
+						<div class="form-group">
+							<label for="usuario">Usuario:</label>
+							<p>${material.usuario.nombre }</p>
+						</div>
 						<a class="btn btn-danger btn-block"
 							href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_ELIMINAR %>">Eliminar</a>
 					</div>

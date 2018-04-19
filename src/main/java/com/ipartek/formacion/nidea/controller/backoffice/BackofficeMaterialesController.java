@@ -149,6 +149,8 @@ public class BackofficeMaterialesController extends HttpServlet {
 		material.setNombre(nombre);
 		material.setUsuario(usuario);
 
+		request.setAttribute("usuarios", usuarioDao.getAll());
+
 		try {
 			if (request.getParameter("precio") != null) {
 				precio = Float.parseFloat(request.getParameter("precio"));
@@ -163,6 +165,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 			} else if (null == material.getUsuario() || material.getUsuario().getId() == -1) {
 				alert = new Alert("Elige un usuario valido. No se ha guardado el registro", Alert.TIPO_WARNING);
+
 			} else {
 
 				try {
@@ -182,9 +185,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 							Alert.TIPO_WARNING);
 				}
 			}
-		} catch (
-
-		NumberFormatException e) {
+		} catch (NumberFormatException e) {
 
 			dispatcher = request.getRequestDispatcher(VIEW_FORM);
 			request.setAttribute("material", material);

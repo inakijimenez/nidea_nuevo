@@ -121,7 +121,7 @@ public class MaterialDAO implements Persistible<Material> {
 	public Material getById(int id) {
 
 		Material m = null;
-		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND WHERE id = ? ;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND m.id = ? ;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
@@ -166,13 +166,14 @@ public class MaterialDAO implements Persistible<Material> {
 
 		boolean resultado = false;
 
-		String sql = "UPDATE `material` SET `nombre`=?, `precio`=? WHERE  `id`=?;";
+		String sql = "UPDATE `material` SET `nombre`=?, `precio`=?, `id_usuario`=? WHERE  `id`=?;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
 			pst.setString(1, pojo.getNombre());
 			pst.setFloat(2, pojo.getPrecio());
-			pst.setInt(3, pojo.getId());
+			pst.setInt(3, pojo.getUsuario().getId());
+			pst.setInt(4, pojo.getId());
 
 			int affectedRows = pst.executeUpdate();
 
