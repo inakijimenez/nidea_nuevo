@@ -2,6 +2,7 @@ package com.ipartek.formacion.nidea.controller.backoffice;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
@@ -10,6 +11,10 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
 
 import com.ipartek.formacion.nidea.model.RolDAO;
 import com.ipartek.formacion.nidea.model.UsuarioDAO;
@@ -46,18 +51,26 @@ public class BackofficeUsuariosController extends HttpServlet {
 	private String search;
 	private int op;
 
+	ValidatorFactory factory;
+	Validator validator;
+
 	@Override
 	public void init(ServletConfig config) throws ServletException {
 
 		super.init(config);
 		dao = UsuarioDAO.getInstance();
 		rolDAO = RolDAO.getInstance();
+		factory = Validation.buildDefaultValidatorFactory();
+		validator = factory.getValidator();
 	}
 
 	@Override
 	public void destroy() {
 		super.destroy();
 		dao = null;
+		rolDAO = null;
+		validator = null;
+		factory = null;
 	}
 
 	/**
@@ -164,8 +177,37 @@ public class BackofficeUsuariosController extends HttpServlet {
 	}
 
 	private void guardar(HttpServletRequest request) {
-		// TODO Auto-generated method stub
+		Usuario usuario = new Usuario();
+		usuario.setId(id_usuario);
+		usuario.setNombre(nombre_usuario);
 
+		try {
+			if (request.getParameter("id_rol") != null) {
+				usuario.getRol().setId(Integer.parseInt(request.getParameter("id_rol")));
+			}
+
+			// Validaciones Incorrectas
+			Set<ConstraintViolation<Usuario>> violations = validator.validate(usuario);
+			if (violations.size() > 0) {
+				String mensajes = "";
+				for (ConstraintViolation<Usuario> violation : violations) {
+					mensajes += violation.getMessage() + "<br>";
+					alert = new Alert(mensajes, Alert.TIPO_WARNING);
+				}
+				// Validaciones OK
+			} else {
+				if (dao.save(usuario)) {
+					alert = new Alert("Usuario guardado", Alert.TIPO_PRIMARY);
+				} else {
+					alert = new Alert("Lo sentimos pero ya existe el nombre de usuario", Alert.TIPO_WARNING);
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		request.setAttribute("usuario", usuario);
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
 
 	private void buscar(HttpServletRequest request) {

@@ -44,6 +44,7 @@
 			<th>Id</th>
 			<th>Nombre</th>
 			<th>Precio</th>
+			<th>Usuario</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -54,6 +55,7 @@
 				<td><a
 					href="backoffice/materiales?id=${material.id}&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO %>">${material.nombre}</a></td>
 				<td>${material.precio}€</td>
+				<td>${material.usuario.nombre}</td>
 			</tr>
 
 		</c:forEach>

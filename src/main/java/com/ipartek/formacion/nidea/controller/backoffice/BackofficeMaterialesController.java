@@ -1,14 +1,11 @@
 package com.ipartek.formacion.nidea.controller.backoffice;
 
 import java.io.IOException;
-import java.sql.SQLDataException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import com.ipartek.formacion.nidea.model.MaterialDAO;
+import com.ipartek.formacion.nidea.model.UsuarioDAO;
 import com.ipartek.formacion.nidea.pojo.Alert;
 import com.ipartek.formacion.nidea.pojo.Material;
 import com.ipartek.formacion.nidea.pojo.Usuario;
@@ -36,6 +34,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 	private RequestDispatcher dispatcher;
 	private Alert alert;
 	private MaterialDAO dao;
+	private UsuarioDAO usuarioDao;
 
 	public static final int OP_MOSTRAR_FORMULARIO = 1;
 	public static final int OP_BUSQUEDA = 2;
@@ -47,6 +46,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 	private int id;
 	private String nombre;
 	private float precio;
+	private Usuario usuario;
 
 	// Parametros comunes
 	private String search; // buscador por nombre material
@@ -57,6 +57,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 	public void init(ServletConfig config) throws ServletException {
 		super.init(config);
 		dao = MaterialDAO.getInstance();
+		usuarioDao = UsuarioDAO.getInstance();
 	}
 
 	@Override
@@ -142,8 +143,8 @@ public class BackofficeMaterialesController extends HttpServlet {
 	private void guardar(HttpServletRequest request) {
 
 		HttpSession session = request.getSession();
-		Usuario usuario = (Usuario)session.getAttribute("usuario");
-		
+		Usuario usuario = (Usuario) session.getAttribute("usuario");
+
 		Material material = new Material();
 		material.setId(id);
 		material.setNombre(nombre);
@@ -178,7 +179,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 					alert = new Alert("El nombre solo puede contener 45 caracteres. No se ha guardado el registro",
 							Alert.TIPO_WARNING);
-				} 
+				}
 			}
 		} catch (NumberFormatException e) {
 
@@ -225,14 +226,12 @@ public class BackofficeMaterialesController extends HttpServlet {
 	private void mostrarFormulario(HttpServletRequest request) {
 		Material material = new Material();
 
-		if (id == -1) {
-			request.setAttribute("material", material);
-			dispatcher = request.getRequestDispatcher(VIEW_FORM);
-		} else {
+		if (id != -1) {
 			material = dao.getById(id);
-			request.setAttribute("material", material);
-			dispatcher = request.getRequestDispatcher(VIEW_FORM);
 		}
+		request.setAttribute("material", material);
+		request.setAttribute("usuarios", usuarioDao.getAll());
+		dispatcher = request.getRequestDispatcher(VIEW_FORM);
 	}
 
 	/**
@@ -256,6 +255,10 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 		nombre = (request.getParameter("nombre") != null) ? request.getParameter("nombre").trim() : "";
 
+		if (request.getParameter("id_usuario") != null) {
+			usuario = usuarioDao.getById(Integer.parseInt(request.getParameter("id_usuario")));
+		}
+
 	}
 
 	// se ejecuta al parar el servidor de aplicaciones
@@ -263,6 +266,7 @@ public class BackofficeMaterialesController extends HttpServlet {
 	public void destroy() {
 		super.destroy();
 		dao = null;
+		usuarioDao = null;
 	}
 
 }

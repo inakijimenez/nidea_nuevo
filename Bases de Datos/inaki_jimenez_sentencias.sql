@@ -15,20 +15,6 @@ WHERE
 	ue.fecha_fin IS NULL
 ORDER BY u.id LIMIT 500;
 
--- Usuarios desempleados
-SELECT
-	u.nombre AS nombre_usuario,
-	ue.fecha_fin AS fecha_desempleo
-FROM
-	usuario AS u,
-	empresa AS e,
-	usuario_empresa AS ue
-WHERE
-	u.id = ue.id_usuario AND
-	e.id = ue.id_empresa AND
-	ue.fecha_fin IS NOT NULL
-GROUP BY u.id;
-
 -- Dias en la ultima empresa
 SELECT
 	u.nombre AS nombre_usuario,
@@ -43,22 +29,54 @@ WHERE
 	u.id = ue.id_usuario AND
 	e.id = ue.id_empresa AND
 	ue.fecha_fin IS NULL;
-	
--- Dias desempleados
-SELECT
+
+-- Usuarios desempleados
+SELECT 
 	u.nombre AS nombre_usuario,
-	ue.fecha_fin AS fecha_desempleo,
-	DATEDIFF(NOW(), ue.fecha_fin) AS dias_desempleado
-FROM
+	e.nombre AS nombre_empresa,
+	ue.fecha_fin AS fecha_desempleo
+
+FROM 		
 	usuario AS u,
-	empresa AS e,
-	usuario_empresa AS ue
-WHERE
+	usuario_empresa AS ue,
+	empresa AS e	
+
+WHERE 
 	u.id = ue.id_usuario AND
 	e.id = ue.id_empresa AND
-	ue.fecha_fin IS NOT NULL
-GROUP BY u.id;
+	u.id NOT IN (
+		SELECT ue.id_usuario FROM usuario_empresa AS ue WHERE ue.fecha_fin IS NULL
+		) AND
+	fecha_fin = (
+		SELECT MAX(fecha_fin)
+		FROM usuario_empresa as uee
+		WHERE uee.id_usuario = u.id -- une esta select con la otra select
+		);
+	
+-- Dias desempleados
+SELECT 
+	u.nombre AS nombre_usuario,
+	e.nombre AS nombre_empresa,
+	ue.fecha_fin AS fecha_desempleo,
+	DATEDIFF(NOW(), ue.fecha_fin) AS dias_desempleado
 
+FROM 		
+	usuario AS u,
+	usuario_empresa AS ue,
+	empresa AS e	
+
+WHERE 
+	u.id = ue.id_usuario AND
+	e.id = ue.id_empresa AND
+	u.id NOT IN (
+		SELECT ue.id_usuario FROM usuario_empresa AS ue WHERE ue.fecha_fin IS NULL
+		) AND
+	fecha_fin = (
+		SELECT MAX(fecha_fin)
+		FROM usuario_empresa as uee
+		WHERE uee.id_usuario = u.id
+		);
+		
 -- Contratos de mas de un año
 SELECT
 	u.nombre AS nombre_usuario,

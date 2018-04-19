@@ -1,10 +1,20 @@
 package com.ipartek.formacion.nidea.pojo;
 
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
 public class Usuario {
 
+	@NotNull
 	private int id;
+
+	@NotNull
+	@Size(min = 1, max = 45)
 	private String nombre;
+
+	@NotNull
 	private String password;
+
 	private Rol rol;
 
 	public static final int ROL_ADMIN = 1;

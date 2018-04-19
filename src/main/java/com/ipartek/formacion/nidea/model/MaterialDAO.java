@@ -7,6 +7,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 import com.ipartek.formacion.nidea.pojo.Material;
+import com.ipartek.formacion.nidea.pojo.Usuario;
 import com.ipartek.formacion.nidea.util.Utilidades;
 import com.mysql.jdbc.MysqlDataTruncation;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -45,7 +46,7 @@ public class MaterialDAO implements Persistible<Material> {
 	public ArrayList<Material> getAll() {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT id, nombre, precio FROM `material` ORDER BY id DESC LIMIT 500;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM `material` as m, usuario as u WHERE u.id = m.id_usuario ORDER BY m.id DESC LIMIT 500;";
 
 		try (Connection con = ConnectionManager.getConnection();
 				PreparedStatement pst = con.prepareStatement(sql);
@@ -94,7 +95,7 @@ public class MaterialDAO implements Persistible<Material> {
 	public ArrayList<Material> getByName(String search) {
 
 		ArrayList<Material> lista = new ArrayList<Material>();
-		String sql = "SELECT id, nombre, precio FROM material WHERE nombre LIKE ? ORDER BY id DESC LIMIT 500;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND m.nombre LIKE ? ORDER BY m.id DESC LIMIT 500;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql)) {
 
@@ -120,7 +121,7 @@ public class MaterialDAO implements Persistible<Material> {
 	public Material getById(int id) {
 
 		Material m = null;
-		String sql = "SELECT id, nombre, precio FROM material WHERE id = ? ;";
+		String sql = "SELECT m.id, m.nombre, precio, u.id as id_usuario, u.nombre as nombre_usuario FROM material as m, usuario as u WHERE u.id = m.id_usuario AND WHERE id = ? ;";
 
 		try (Connection con = ConnectionManager.getConnection(); PreparedStatement pst = con.prepareStatement(sql);) {
 
@@ -239,10 +240,10 @@ public class MaterialDAO implements Persistible<Material> {
 			if (affetedRows == 1) {
 				resultado = true;
 			}
-			
+
 		} catch (Exception e) {
 			e.printStackTrace();
-			
+
 		} finally {
 			try {
 
@@ -264,12 +265,18 @@ public class MaterialDAO implements Persistible<Material> {
 	public Material mapper(ResultSet rs) throws SQLException {
 
 		Material m = null;
+		Usuario u = null;
 
 		if (rs != null) {
 			m = new Material();
 			m.setId(rs.getInt("id"));
 			m.setNombre(rs.getString("nombre"));
 			m.setPrecio(rs.getFloat("precio"));
+
+			u = new Usuario();
+			u.setId(rs.getInt("id_usuario"));
+			u.setNombre(rs.getString("nombre_usuario"));
+			m.setUsuario(u);
 		}
 
 		return m;

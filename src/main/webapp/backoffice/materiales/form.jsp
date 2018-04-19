@@ -29,6 +29,14 @@
 			class="form-control" id="precio" name="precio" placeholder="Precio"
 			required value="${material.precio }">
 	</div>
+	<div class="form-group">
+		<select name="id_usuario" class="form-control">
+			<option value="-1">Seleccione Usuario</option>
+			<c:forEach items="${usuarios }" var="usuario">
+				<option value="${usuario.id }" ${usuario.id == material.usuario.id?'selected':''}>${usuario.nombre }</option>
+			</c:forEach>
+		</select>
+	</div>
 
 	<c:if test="${material.id == -1}">
 		<input type="hidden" name="op"
