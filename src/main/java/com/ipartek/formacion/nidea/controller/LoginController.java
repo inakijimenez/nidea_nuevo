@@ -69,11 +69,6 @@ public class LoginController extends HttpServlet {
 				usuario = dao.check(nombre, password);
 				if (usuario.getId() != -1) {
 
-					// usuario = dao.getByExactName(nombre);
-					// if (usuario.getId() != -1) { // si el nombre de usuario existe
-					// if (usuario.getPassword().equals(password)) { // se compara con la password y si existe se le
-					// asigan
-					// // una redireccion basandose en el id_rol
 					alert = new Alert("Ongi Etorri", Alert.TIPO_PRIMARY);
 					if (usuario.getRol().getId() == Usuario.ROL_ADMIN) {
 						view = VIEW_BACKOFFICE;
@@ -84,10 +79,6 @@ public class LoginController extends HttpServlet {
 					session.setAttribute("usuario", usuario);
 					session.setMaxInactiveInterval(SESSION_EXPIRATION);
 
-					// } else {
-					// alert = new Alert("La contraseña es incorrecta", Alert.TIPO_DANGER);
-					// view = VIEW_LOGIN;
-					// }
 				} else {
 					alert = new Alert("El nombre de usuario no existe", Alert.TIPO_DANGER);
 					view = VIEW_LOGIN;

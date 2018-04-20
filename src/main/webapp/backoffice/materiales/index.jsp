@@ -32,9 +32,7 @@
 	href="backoffice/materiales?id=-1&op=<%=BackofficeMaterialesController.OP_MOSTRAR_FORMULARIO%>"
 	class="btn btn-success my-2 my-sm-0">Nuevo Material</a>
 
-<a
-	href="backoffice/materiales?op=<%=BackofficeMaterialesController.OP_MOSTRAR_CRUD%>"
-	class="btn btn-success my-2 my-sm-0">Operaciones de CRUD</a>
+
 
 <hr>
 

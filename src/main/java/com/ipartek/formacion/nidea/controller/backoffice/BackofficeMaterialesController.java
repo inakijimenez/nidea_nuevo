@@ -28,7 +28,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 	private static final String VIEW_INDEX = "/backoffice/materiales/index.jsp";
 	private static final String VIEW_FORM = "/backoffice/materiales/form.jsp";
-	private static final String VIEW_CRUD = "/backoffice/materiales/crud.jsp";
 
 	private RequestDispatcher dispatcher;
 	private Alert alert;
@@ -57,13 +56,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 		super.init(config);
 		dao = MaterialDAO.getInstance();
 		usuarioDao = UsuarioDAO.getInstance();
-	}
-
-	@Override
-	protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		System.out.println("Antes de ejecutar doGet y doPost");
-		super.service(req, resp);// llama a doGet o doPost
-		System.out.println("Despues de ejecutar doGet y doPost");
 	}
 
 	/**
@@ -114,10 +106,6 @@ public class BackofficeMaterialesController extends HttpServlet {
 
 			case OP_GUARDAR:
 				guardar(request);
-				break;
-
-			case OP_MOSTRAR_CRUD:
-				dispatcher = request.getRequestDispatcher(VIEW_CRUD);
 				break;
 
 			default:

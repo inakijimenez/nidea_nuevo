@@ -26,6 +26,7 @@
 		$('#table-materiales').DataTable();
 		$('#table-usuarios').DataTable();
 		$('#table-roles').DataTable();
+		$('#table-materiales-frontoffice').DataTable();
 	});
 </script>
 </body>
